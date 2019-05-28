@@ -1,0 +1,50 @@
+<script src="https://static.opentok.com/v2/js/opentok.js"></script>
+<script>
+
+// credentials
+var apiKey = '45828062';
+var sessionId = '1_MX40NTgyODA2Mn5-MTU1NzkwOTU4OTAzMn5KMGkydXZuS0pVRGF3WGJsbjgvV3lDbkh-UH4';
+var token = 'T1==cGFydG5lcl9pZD00NTgyODA2MiZzaWc9Yjk0OGQyNzA5M2I3MjY1NWVjNzZlOTlhZDUzMzMyNzdiNGZhZTRjZjpzZXNzaW9uX2lkPTFfTVg0ME5UZ3lPREEyTW41LU1UVTFOemt3T1RVNE9UQXpNbjVLTUdreWRYWnVTMHBWUkdGM1dHSnNiamd2VjNsRGJraC1VSDQmY3JlYXRlX3RpbWU9MTU1NzkwOTU5MiZub25jZT0wLjA3OTUzNjYzNDM5MjkwMjI2JnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE1NTc5OTU5OTI=';
+
+
+// connect to session
+var session = OT.initSession(apiKey, sessionId);
+
+// create publisher ------ publiseher object 
+var publisher = OT.initPublisher();
+session.connect(token, function(err) {
+   // publish publisher
+   session.publish(publisher); //This code publishes the audio-video stream to the session using your webcam and microphone
+   
+});
+
+var pubOptions = {publishAudio:true, publishVideo:false};
+
+// Replace replacementElementId with the ID of the DOM element to replace:
+publisher = OT.initPublisher(replacementElementId, pubOptions); // UI ni siya
+
+  
+// create subscriber
+session.on('streamCreated', function(event) { 
+   session.subscribe(event.stream);
+}); //This code allows you to subscribe to new streams published by other clients in the session.
+
+
+var options = {subscribeToAudio:true, subscribeToVideo:false};
+
+// Replace stream and replacementElementId with your own values:
+subscriber = session.subscribe(stream, replacementElementId, options);
+var subscribe = session.subscribe(event.stream, 'subscriberElement', function(error) {
+  if (error) {
+    console.log (error.message);
+    return;
+  }
+
+  if(subscriber.stream.hasVideo){
+    var imgData = subscriber.getImgData();
+    subscriber.setStyle('backgroundImageURI', imgData);
+  }else{
+    subscriber.setStyle('backgroundImageURI', 'https://tokbox.com/img/styleguide/tb-colors-cream.png');
+  }
+})
+</script>
